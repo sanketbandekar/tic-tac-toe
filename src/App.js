@@ -5,39 +5,48 @@ import "./styles/root.scss";
 
 const App = () => {
 
-  const [board, setBoard] = useState(Array(9).fill(null));
-    const [isNext, setIsNext] = useState(true);
-    const winner = calculateWinner(board);
+  const [history, setHistory] = useState([{ board: Array(9).fill(null), isNext: true},]);
+  const [currentMove, setCurrentMove] = useState(0);
 
-    const message = winner ? `Winner is ${winner}` : `Next Player ${isNext? 'X' : 'O' }` 
+  const current  = history[currentMove];
+
+  console.log('history:', history);
+
+    const winner = calculateWinner(current.board);
+
+    const message = winner ? `Winner is ${winner}` : `Next Player ${current.isNext? 'X' : 'O' }` 
 
     const handleClickSquare = position => {
 
-        if (board[position] || winner){
+        if (current.board[position] || winner){
             return;
         }
 
-        setBoard( prev => { // prev hold the current value and then using map we update its value;
+        setHistory( prev => { 
+          
+          const last = prev[prev.length - 1];
+          // prev hold the current value and then using map we update its value;
             // so for first element prev will be always true and returns value X;
             // so setIsNext we use ! operator;
             // map function accepts three arguments (current_element,index,some_array);
-            return prev.map((square,pos) => {
+            const newBoard = last.board.map((square,pos) => {
                 if (pos === position){
-                    return isNext ? 'X' : 'O';
+                    return last.isNext ? 'X' : 'O';
                 }
 
                 return square;
             });
+            return prev.concat({board: newBoard, isNext: !last.isNext});
         });
 
-        setIsNext(prev => !prev);
+        setCurrentMove(prev => prev + 1);
     };
 
   return(
     <div className="app">
     <h1>TIC TAC TOE</h1>
     <h2>{message}</h2>
-    <Board board = {board} handleClickSquare={handleClickSquare}/>
+    <Board board = {current.board} handleClickSquare={handleClickSquare}/>
     </div>
   );
 };
