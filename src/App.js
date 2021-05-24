@@ -25,10 +25,7 @@ const App = () => {
         setHistory( prev => { 
           
           const last = prev[prev.length - 1];
-          // prev hold the current value and then using map we update its value;
-            // so for first element prev will be always true and returns value X;
-            // so setIsNext we use ! operator;
-            // map function accepts three arguments (current_element,index,some_array);
+
             const newBoard = last.board.map((square,pos) => {
                 if (pos === position){
                     return last.isNext ? 'X' : 'O';

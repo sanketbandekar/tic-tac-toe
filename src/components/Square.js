@@ -2,8 +2,6 @@ import React from 'react'
 
 
 const Square = ({value,onClick,isWinning}) => {
-
-    // console.log("Square Render");
     
     return (
         <button 
